@@ -3,7 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const pool = require("./db.cjs");
-const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
+
+const uuidv4 = () => crypto.randomUUID();
 const Anthropic = require("@anthropic-ai/sdk"); 
 
 const app = express();

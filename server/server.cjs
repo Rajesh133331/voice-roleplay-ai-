@@ -8,6 +8,10 @@ const crypto = require("crypto");
 const uuidv4 = () => crypto.randomUUID();
 const Anthropic = require("@anthropic-ai/sdk"); 
 
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, "../dist")));
+
 const app = express();
 
 app.use(cors());
@@ -17,6 +21,11 @@ const ai = new Anthropic({
   apiKey: process.env.CLAUDE_API_KEY,
 });
 
+
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
 //creating the session id to track the chat
 app.get("/session", async (req, res) => {
   const id = uuidv4();

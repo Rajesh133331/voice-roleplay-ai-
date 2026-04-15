@@ -23,9 +23,7 @@ const ai = new Anthropic({
 
 
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
-});
+
 //creating the session id to track the chat
 app.get("/session", async (req, res) => {
   const id = uuidv4();
@@ -181,6 +179,11 @@ Return JSON only:
   } catch {
     res.json({ score: 0, feedback: "error" });
   }
+});
+
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
 
 // port fix for deploy

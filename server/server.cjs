@@ -182,8 +182,8 @@ Return JSON only:
 });
 
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/index.html"));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 // port fix for deploy

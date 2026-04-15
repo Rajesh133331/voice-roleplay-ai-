@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+  .home-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .home-wrapper > div {
+    padding: 30px !important;
+  }
+}

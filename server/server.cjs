@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const pool = require("./db.cjs");
 const crypto = require("crypto");
@@ -12,7 +13,6 @@ const path = require("path");
 
 app.use(express.static(path.join(__dirname, "../dist")));
 
-const app = express();
 
 app.use(cors());
 app.use(express.json());

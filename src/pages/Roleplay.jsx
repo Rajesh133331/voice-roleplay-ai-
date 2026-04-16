@@ -155,7 +155,7 @@ export default function Roleplay() {
 
             <div style={styles.buttons}>
               <button style={styles.mic} onClick={speak}>
-                🎤 Speak
+                 Speak
               </button>
 
               <button style={styles.end} onClick={end}>
@@ -189,7 +189,7 @@ export default function Roleplay() {
 
 const styles = {
   page: {
-    height: "100vh",
+    height: "100dvh",
     display: "flex",
     flexDirection: "column",
     background: "#f7f7f7",
@@ -207,6 +207,7 @@ const styles = {
     flex: 1,
     overflowY: "auto",
     padding: "20px",
+    
   },
 
   userRow: {
@@ -240,6 +241,8 @@ const styles = {
     padding: "16px",
     borderTop: "1px solid #ddd",
     background: "#fff",
+     position: "sticky",
+  bottom: 0,
   },
 
   input: {

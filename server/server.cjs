@@ -145,7 +145,6 @@ app.post("/end-session", async (req, res) => {
 
       system: `
 Evaluate the store executive.
-if no conversation provide kidly reply as no conversation provided to give feedback
 
 Return JSON only:
 {
@@ -178,7 +177,7 @@ Return JSON only:
 
     res.json(parsed);
   } catch {
-    res.json({ score: -, feedback: "No information is provided to give feedback" });
+    res.json({ score:0, feedback: "No information is provided to give feedback" });
   }
 });
 

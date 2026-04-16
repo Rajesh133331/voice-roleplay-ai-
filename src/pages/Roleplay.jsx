@@ -25,19 +25,21 @@ export default function Roleplay() {
 
   // load messages
   useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        const res = await api.get(`/messages/${sessionId}`);
-        setMessages(res.data);
-      } catch {
-        console.log("failed to load messages");
-      }
-    };
+  const id = localStorage.getItem("sessionId");
 
-    if (sessionId) {
-      loadMessages();
+  if (!id) return;
+
+  const loadMessages = async () => {
+    try {
+      const res = await api.get(`/messages/${id}`);
+      setMessages(res.data);
+    } catch {
+      console.log("failed to load messages");
     }
-  }, [sessionId]);
+  };
+
+  loadMessages();
+}, []);
 
   // scroll
   useEffect(() => {

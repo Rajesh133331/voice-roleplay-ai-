@@ -178,7 +178,7 @@ Return JSON only:
 
     res.json(parsed);
   } catch {
-    res.json({ score: -, feedback: "No information is to give feedback" });
+    res.json({ score: -, feedback: "No information is provided to give feedback" });
   }
 });
 

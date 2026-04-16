@@ -145,6 +145,7 @@ app.post("/end-session", async (req, res) => {
 
       system: `
 Evaluate the store executive.
+if no conversation provide kidly reply as no conversation provided to give feedback
 
 Return JSON only:
 {

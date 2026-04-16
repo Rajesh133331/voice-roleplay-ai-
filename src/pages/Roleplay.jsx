@@ -8,6 +8,8 @@ export default function Roleplay() {
   const [time, setTime] = useState(0);
   const [ended, setEnded] = useState(false);
   const [result, setResult] = useState(null);
+  const recognitionRef = useRef(null);
+  const [isListening, setIsListening] = useState(false);
 
   const navigate = useNavigate();
   const sessionId = localStorage.getItem("sessionId");
@@ -44,55 +46,71 @@ export default function Roleplay() {
     }
   }, [messages]);
 
- const speak = () => {
-   if (ended) return;
+const speak = () => {
+  if (ended) return;
 
-   // ✅ 1. check browser support FIRST
-   if (
-     !("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
-   ) {
-     alert("Speech not supported in this browser");
-     return;
-   }
+  if (
+    !("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
+  ) {
+    alert("Speech not supported in this browser");
+    return;
+  }
 
-   const SpeechRecognition =
-     window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
-   const recognition = new SpeechRecognition();
-   recognition.lang = "en-IN";
+  if (!recognitionRef.current) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
 
-   // ✅ 2. handle mic permission / errors
-   recognition.onerror = (e) => {
-     if (e.error === "not-allowed") {
-       alert("Please allow microphone access");
-     } else {
-       alert("Mic error: " + e.error);
-     }
-   };
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
 
-   recognition.onresult = async (e) => {
-     const result = e.results[0][0].transcript;
+    recognition.onend = () => {
+      setIsListening(false);
+    };
 
-     setText(result);
+    recognition.onerror = (e) => {
+      if (e.error === "not-allowed") {
+        alert("Please allow microphone access");
+      } else {
+        alert("Mic error: " + e.error);
+      }
+      setIsListening(false);
+    };
 
-     setMessages((prev) => [...prev, { from: "user", text: result }]);
+    recognition.onresult = async (e) => {
+      const result = e.results[0][0].transcript;
 
-     try {
-       const res = await api.post("/chat", { text: result, sessionId });
+      setText(result);
 
-       const reply = res.data.reply;
+      setMessages((prev) => [...prev, { from: "user", text: result }]);
 
-       setMessages((prev) => [...prev, { from: "ai", text: reply }]);
+      try {
+        const res = await api.post("/chat", { text: result, sessionId });
 
-       const voice = new SpeechSynthesisUtterance(reply);
-       speechSynthesis.speak(voice);
-     } catch {
-       console.log("chat failed");
-     }
-   };
+        const reply = res.data.reply;
 
-   recognition.start();
- };
+        setMessages((prev) => [...prev, { from: "ai", text: reply }]);
+
+        const voice = new SpeechSynthesisUtterance(reply);
+        speechSynthesis.speak(voice);
+      } catch {
+        console.log("chat failed");
+      }
+    };
+
+    recognitionRef.current = recognition;
+  }
+
+ 
+  if (isListening) {
+    recognitionRef.current.stop();
+  } else {
+    recognitionRef.current.start();
+  }
+};
 
   const end = async () => {
     if (ended) return;

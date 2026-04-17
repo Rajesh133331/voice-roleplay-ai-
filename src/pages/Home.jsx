@@ -1,18 +1,24 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import api from "../utils/api";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const start = async () => {
-    try {
-      const res = await api.get("/session");
-      localStorage.setItem("sessionId", res.data.sessionId);
-      navigate("/play");
-    } catch {
-      alert("unable to start");
-    }
-  };
+  if (loading) return; // prevent multiple clicks
+
+  setLoading(true);
+
+  try {
+    const res = await api.get("/session");
+    localStorage.setItem("sessionId", res.data.sessionId);
+    navigate("/play");
+  } catch {
+    alert("unable to start");
+    setLoading(false);
+};
 
   return (
     <div style={styles.wrapper} className="home-wrapper">
@@ -24,9 +30,17 @@ export default function Home() {
           Practice handling real customer situations using voice interaction.
         </p>
 
-        <button style={styles.button} onClick={start}>
-          Start Session
-        </button>
+        <button
+  style={{
+    ...styles.button,
+    background: loading ? "#777" : "#000",
+    cursor: loading ? "not-allowed" : "pointer",
+  }}
+  onClick={start}
+  disabled={loading}
+>
+  {loading ? "Starting..." : "Start Session"}
+</button>
       </div>
 
       {/* RIGHT */}

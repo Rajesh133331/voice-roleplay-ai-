@@ -18,7 +18,8 @@ export default function Home() {
   } catch {
     alert("unable to start");
     setLoading(false);
-};
+}
+  }
 
   return (
     <div style={styles.wrapper} className="home-wrapper">
